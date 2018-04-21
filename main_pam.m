@@ -69,3 +69,52 @@ end
 hold off;
 grid on;
 
+
+%---------------------------------%
+% 1.4 The Special Characteristics %
+%---------------------------------%
+Nfft = 2048; % Size of the FFT
+P = fftshift(fft(p,Nfft)); % Spectrum (FFT) of the pulse-shape
+X = fftshift(fft(xn,Nfft)); % Spectrum (FFT) of the PAM waveform
+Y = fftshift(fft(yn,Nfft)); % Spectrum (FFT) of the noisy PAM waveform
+f = -Fs/2:Fs/Nfft:Fs/2-Fs/Nfft; % Frequency axis for plotting the spectra
+
+% Figure: Pulse Spectrum.
+figure;
+subplot(211);
+plot(f,abs(P));
+grid;
+title('Pulse Spectrum');
+xlabel('Frequency [Hz]');
+subplot(212);
+plot(f,20*log10(abs(P)));
+grid;
+title('Pulse Spectrum in dB');
+xlabel('Frequency [Hz]');
+
+% Figure: Signal Spectrum in dB.
+figure;
+subplot(211);
+plot(f,abs(X));
+grid;
+title('Signal Spectrum');
+xlabel('Frequency [Hz]');
+subplot(212);
+plot(f,20*log10(abs(X)));
+grid;
+title('Signal Spectrum in dB');
+xlabel('Frequency [Hz]');
+
+% Figure: Noisy Signal Spectrum.
+figure;
+subplot(211);
+plot(f,abs(Y));
+grid;
+title('Noisy Signal Spectrum');
+xlabel('Frequency [Hz]');
+subplot(212);
+plot(f,20*log10(abs(Y)));
+grid;
+title('Noisy Signal Spectrum in dB');
+xlabel('Frequency [Hz]');
+
