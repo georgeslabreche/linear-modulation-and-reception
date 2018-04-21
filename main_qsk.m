@@ -1,4 +1,4 @@
-addpath('./qsk/');
+%addpath('./qsk/');
 
 clear all 
 close all
