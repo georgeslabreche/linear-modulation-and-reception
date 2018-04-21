@@ -17,12 +17,16 @@ title('PAM Sequence');
 %--------------------%
 % 1.2 Nyquist Pulse  %
 %--------------------%
-Fs = 24000; % Sampling frequency 24000 Hz
+Fs = 24000; % Sampling frequency 24000 Hz.
 T = 1/8000; % Symbol time interval [s].
-t = -5*T:1/Fs:5*T; % Time vector (sampling intervals)
-t = t+1e-10; % Otherwise, the denominator would be zero at t=0
-% (or manually set p (t=0)=1 )
-alfa = 0.5; % Roll-off factor
+t = -5*T:1/Fs:5*T; % Time vector (sampling intervals).
+
+% Otherwise, the denominator would be zero at t=0
+% (or manually set p (t=0)=1).
+t = t+1e-10; 
+
+% Roll-off factor.
+alfa = 0.5; 
 
 p = raised_cosine_fir_filter(T, t, alfa);
 
@@ -39,12 +43,12 @@ hold off;
 %--------------------------------------------%
 % 1.3 Linear modulation with a Nyquist pulse %
 %--------------------------------------------%
-r = Fs*T; % Oversampling factor
+r = Fs*T; % Oversampling factor.
 xn = pulse_shaping_filtering(pam, p, r);
 
 % plot
 figure;
-plot(xn(1:200)); % A piece of the signal
+plot(xn(1:200)); % A piece of the signal.
 title('Linear modulation with a Nyquist pulse');
 
 %---------------------%
@@ -59,11 +63,11 @@ title('Eye Diagram');
 hold off;
 grid on;
 
-var_zn = 0.01; % Set noise variance
-zn = sqrt(var_zn)*randn(size(xn)); % Generate noise with defined variance
-yn = xn + zn; % Add noise to the signal
+var_zn = 0.01; % Set noise variance.
+zn = sqrt(var_zn)*randn(size(xn)); % Generate noise with defined variance.
+yn = xn + zn; % Add noise to the signal.
 
-% Plot the eye-diagram for yn as above
+% Plot the eye-diagram for yn as above.
 figure
 hold on;
 for i = 16:6:291
@@ -77,11 +81,11 @@ grid on;
 %---------------------------------%
 % 1.4 The Special Characteristics %
 %---------------------------------%
-Nfft = 2048; % Size of the FFT
-P = fftshift(fft(p,Nfft)); % Spectrum (FFT) of the pulse-shape
-X = fftshift(fft(xn,Nfft)); % Spectrum (FFT) of the PAM waveform
-Y = fftshift(fft(yn,Nfft)); % Spectrum (FFT) of the noisy PAM waveform
-f = -Fs/2:Fs/Nfft:Fs/2-Fs/Nfft; % Frequency axis for plotting the spectra
+Nfft = 2048; % Size of the FFT.
+P = fftshift(fft(p,Nfft)); % Spectrum (FFT) of the pulse-shape.
+X = fftshift(fft(xn,Nfft)); % Spectrum (FFT) of the PAM waveform.
+Y = fftshift(fft(yn,Nfft)); % Spectrum (FFT) of the noisy PAM waveform.
+f = -Fs/2:Fs/Nfft:Fs/2-Fs/Nfft; % Frequency axis for plotting the spectra.
 
 % Figure: Pulse Spectrum.
 figure;

@@ -108,7 +108,7 @@ qam_det = const_qam(ind_2);
 %---------------------------------%
 % 2.4 The symbol-error rate (SER) %
 %---------------------------------%
- % minimum distance d for our QPSK constellation.
+% minimum distance d for our QPSK constellation.
 d = sqrt(2);
 
 % sigma is the deviation of noise (real or imaginary part).
