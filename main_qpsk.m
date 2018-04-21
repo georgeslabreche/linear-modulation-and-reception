@@ -1,5 +1,3 @@
-%addpath('./qpsk/');
-
 clear all 
 close all
 clc
