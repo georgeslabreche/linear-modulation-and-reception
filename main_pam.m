@@ -1,9 +1,8 @@
 addpath('./pam/');
-addpath('./qsk/');
 
-clear all 
-close all
-clc
+clear all;
+close all;
+clc;
 
 %--------------------%
 % 1.1 4-PAM Sequence %
