@@ -15,6 +15,7 @@ figure
 plot(qpsk,'o');
 xlabel('Re');
 ylabel('Im');
+title('QPSK Constellation')
 axis([-2 2 -2 2]); % scale the axis of the figure.
 
 aqam = [-7 -5 -3 -1 1 3 5 7];
@@ -30,6 +31,7 @@ plot(qam,'o');
 axis([-8 8 -8 8]); % Scale the axis of the figure.
 xlabel('Re');
 ylabel('Im');
+title('64-QAM Constellation')
 
 %--------------------------------%
 % 2.2 Adding Noise to the Signal %
@@ -47,7 +49,8 @@ snqpsk = qpsk+n*p1; % add noise to signal.
 
 % plot noisy constellation.
 figure
-plot(snqpsk,'o'); 
+plot(snqpsk,'o');
+title('Noisy QPSK Constellation')
 
 % add noise to signal.
 p2 = std(qam)/(std(n)*10^(SNR/20)); % proper constant p.
@@ -56,6 +59,7 @@ snqam = qam+n*p2;
 % plot noisy constellation.
 figure
 plot(snqam,'o');
+title('Noisy 64-QAM Constellation')
 
 %---------------------------------------------------%
 % 2.3 Signal Detection (symbol by symbol detection) %

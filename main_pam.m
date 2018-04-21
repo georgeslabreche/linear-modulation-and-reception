@@ -12,6 +12,7 @@ pam = pam_sequence();
 % plot
 figure;
 stem(pam);
+title('PAM Sequence');
 
 %--------------------%
 % 1.2 Nyquist Pulse  %
@@ -32,6 +33,7 @@ hold on;
 stem(t,p);
 xlabel('Time [s]');
 ylabel('Amplitude');
+title('Nyquist pulse');
 hold off;
 
 %--------------------------------------------%
@@ -43,6 +45,7 @@ xn = pulse_shaping_filtering(pam, p, r);
 % plot
 figure;
 plot(xn(1:200)); % A piece of the signal
+title('Linear modulation with a Nyquist pulse');
 
 %---------------------%
 % 1.4 The Eye-Diagram %
@@ -52,6 +55,7 @@ hold on;
 for i = 16:6:291
     plot(xn(i:i+6));
 end
+title('Eye Diagram');
 hold off;
 grid on;
 
@@ -65,6 +69,7 @@ hold on;
 for i = 16:6:291
     plot(yn(i:i+6));
 end
+title('Noisy Eye Diagram');
 hold off;
 grid on;
 
