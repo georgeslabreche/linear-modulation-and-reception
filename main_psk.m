@@ -6,7 +6,7 @@ clc
 
 % Show plots or just export them directly as an image file (or both!).
 show_plots = 'off';
-export_plots = false;
+export_plots = true;
 
 % Create plot image export directory if it doesn't exist.
 export_dir = 'plots/psk/';
@@ -276,6 +276,7 @@ plot(SNR_range(1:11), ser_simu_qpsk(1:11));
 xlabel('SNR');
 ylabel('SER');
 %title(plot_title);
+legend('Theoretical', 'Simulated');
 hold off;
 if export_plots == true
     print(strcat(export_dir,'qpsk-ser-noise-0-to-10.png'), '-dpng');
@@ -290,6 +291,7 @@ plot(SNR_range(16:26), ser_simu_qpsk(16:26));
 xlabel('SNR');
 ylabel('SER');
 %title(plot_title);
+legend('Theoretical', 'Simulated');
 hold off;
 if export_plots == true
     print(strcat(export_dir,'qpsk-ser-noise-15-to-25.png'), '-dpng');
@@ -309,6 +311,7 @@ plot(SNR_range(1:11), ser_simu_qam(1:11));
 xlabel('SNR');
 ylabel('SER');
 %title(plot_title);
+legend('Theoretical', 'Simulated');
 hold off;
 if export_plots == true
     print(strcat(export_dir, '64-qam-ser-noise-0-to-10.png'), '-dpng');
@@ -323,6 +326,7 @@ plot(SNR_range(16:26), ser_simu_qam(16:26));
 xlabel('SNR');
 ylabel('SER');
 %title(plot_title);
+legend('Theoretical', 'Simulated');
 hold off;
 if export_plots == true
     print(strcat(export_dir,'64-qam-ser-noise-15-to-25.png'), '-dpng');
