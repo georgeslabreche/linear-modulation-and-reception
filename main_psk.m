@@ -6,7 +6,7 @@ clc
 
 % Show plots or just export them directly as an image file (or both!).
 show_plots = 'off';
-export_plots = true;
+export_plots = false;
 
 % Create plot image export directory if it doesn't exist.
 export_dir = 'plots/psk/';
@@ -168,73 +168,103 @@ end
 %---------------------------------------------------%
 % 2.3 Signal Detection (symbol by symbol detection) %
 %---------------------------------------------------%
-%------%
-% QPSK %
-%------%
-% 4x20000-matrix, each line contains the same sn-vector.
-sn_block = repmat(snqpsk,1,4).';
+ser_theo_qpsk = [];
+ser_simu_qpsk = [];
+ser_simu_qam = [];
+ser_theo_qam = [];
 
-% 4x20000-matrix, where each column contains const.
-const_block = repmat(const_qpsk,1,20000);
+for SNR = 1:10
+    % Adding noise to QPSK and 64-QAM signals.
+    % add noise to the QPSK signal.
+    pqpsk = std(qpsk)/(std(n)*10^(SNR/20)); % proper constant p.
+    snqpsk = qpsk + n * pqpsk; % add noise to signal.
+    
+    % add noise to 64-QAM signal.
+    pqam = std(qam)/(std(n)*10^(SNR/20)); % proper constant p.
+    snqam = qam + n * pqam; 
 
-% 4x20000-matrix, whose every column contains the received symbol
-% distances to all possible symbol constellation points.
-distance = abs(sn_block-const_block); 
+    %------%
+    % QPSK %
+    %------%
+    % 4x20000-matrix, each line contains the same sn-vector.
+    sn_block = repmat(snqpsk,1,4).';
 
-% returns the minimum distance y and the corresponding
-% constellation index ind_1. Both vectors have the size of 1x20000.
-[~,ind_1] = min(distance); 
+    % 4x20000-matrix, where each column contains const.
+    const_block = repmat(const_qpsk,1,20000);
 
-% using vector ind_1, we can determine the detected symbol vector.
-qpsk_det = const_qpsk(ind_1);
+    % 4x20000-matrix, whose every column contains the received symbol
+    % distances to all possible symbol constellation points.
+    distance = abs(sn_block-const_block); 
 
-%-----%
-% QAM %
-%-----%
-% 64x20000-matrix, each line contains the same sn-vector.
-sn_block = repmat(snqam,1,64).';
+    % returns the minimum distance y and the corresponding
+    % constellation index ind_1. Both vectors have the size of 1x20000.
+    [~,ind_1] = min(distance); 
 
-% 64x20000-matrix, where each column contains the const.
-const_block = repmat(const_qam,1,20000);
+    % using vector ind_1, we can determine the detected symbol vector.
+    qpsk_det = const_qpsk(ind_1);
 
-% 64x20000-matrix, whose every column contains the received symbol 
-% distances to all possible symbol constellation points.
-distance = abs(sn_block-const_block);
+    %-----%
+    % QAM %
+    %-----%
+    % 64x20000-matrix, each line contains the same sn-vector.
+    sn_block = repmat(snqam,1,64).';
 
-% returns the minimum distance y and the corresponding
-% constellation index ind_2. Both vectors have the size of 1x20000.
-[y,ind_2] = min(distance); 
+    % 64x20000-matrix, where each column contains the const.
+    const_block = repmat(const_qam,1,20000);
 
-% using vector ind_2, we can determine the detected symbol vector.
-qam_det = const_qam(ind_2); 
+    % 64x20000-matrix, whose every column contains the received symbol 
+    % distances to all possible symbol constellation points.
+    distance = abs(sn_block-const_block);
 
+    % returns the minimum distance y and the corresponding
+    % constellation index ind_2. Both vectors have the size of 1x20000.
+    [y,ind_2] = min(distance); 
 
-%---------------------------------%
-% 2.4 The symbol-error rate (SER) %
-%---------------------------------%
-% minimum distance d for our QPSK constellation.
-d = sqrt(2);
+    % using vector ind_2, we can determine the detected symbol vector.
+    qam_det = const_qam(ind_2); 
 
-% sigma is the deviation of noise (real or imaginary part).
-sigma = std(real(n * pqpsk));
+    %---------------------------------%
+    % 2.4 The symbol-error rate (SER) %
+    %---------------------------------%
+    %------%
+    % QPSK %
+    %------%
+    % minimum distance d for our QPSK constellation.
+    d = sqrt(2);
 
-Q = 0.5*erfc(d/(sqrt(2)*2*sigma));
+    % sigma is the deviation of noise (real or imaginary part).
+    sigma = std(real(n * pqpsk));
 
-% theoretical symbol error rate.
-ser_theo = 2*Q - Q^2
+    Q = 0.5*erfc(d/(sqrt(2)*2*sigma));
 
-% Comparison returns 0 (false) or 1 (true)
-nr_of_errors = sum(qpsk~=qpsk_det);
+    % theoretical symbol error rate.
+    ser_theo_qpsk = [ser_theo_qpsk, 2*Q - Q^2];
 
-% simulated symbol error rate.
-ser_simu = nr_of_errors/20000
+    % simulated symbol error rate.
+    % comparison returns 0 (false) or 1 (true)
+    nr_of_errors = sum(qpsk~=qpsk_det);
+    ser_simu_qpsk = [ser_simu_qpsk, nr_of_errors/20000];
 
-d = 2; % minimum distance d for our QAM alphabet
+    %-----%
+    % QAM %
+    %-----%
+    d = 2; % minimum distance d for our QAM alphabet
 
-% sigma is the deviation of noise real or imaginary part
-sigma = std(real(n * pqam));
-Q = 0.5*erfc(d/(sqrt(2)*2*sigma));
+    % sigma is the deviation of noise real or imaginary part
+    sigma = std(real(n * pqam));
+    Q = 0.5*erfc(d/(sqrt(2)*2*sigma));
+    
+    % theoretical symbol error rate
+    ser_theo_qam = [ser_theo_qam, 3.5*Q - 3.0625*Q^2];
 
-nr_of_errors = sum(qam~=qam_det);
-ser_simu = nr_of_errors/20000 % simulated symbol error rate
-ser_theo = 3.5*Q - 3.0625*Q^2 % theoretical symbol error rate
+    % simulated symbol error rate
+    nr_of_errors = sum(qam~=qam_det);
+    ser_simu_qam = [ser_simu_qam, nr_of_errors/20000];
+    
+end
+
+ser_theo_qpsk
+ser_simu_qpsk
+
+ser_simu_qam
+ser_theo_qam
