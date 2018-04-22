@@ -170,8 +170,9 @@ ser_theo_qpsk = [];
 ser_simu_qpsk = [];
 ser_simu_qam = [];
 ser_theo_qam = [];
+SNR_range = 0:25;
 
-for SNR = 0:10
+for SNR = SNR_range
     % Adding noise to QPSK and 64-QAM signals.
     % add noise to the QPSK signal.
     pqpsk = std(qpsk)/(std(n)*10^(SNR/20)); % proper constant p.
@@ -236,12 +237,12 @@ for SNR = 0:10
     Q = 0.5*erfc(d/(sqrt(2)*2*sigma));
 
     % theoretical symbol error rate.
-    ser_theo_qpsk = [ser_theo_qpsk, 2*Q - Q^2];
+    ser_theo_qpsk = [ser_theo_qpsk; 2*Q - Q^2];
 
     % simulated symbol error rate.
     % comparison returns 0 (false) or 1 (true)
     nr_of_errors = sum(qpsk~=qpsk_det);
-    ser_simu_qpsk = [ser_simu_qpsk, nr_of_errors/20000];
+    ser_simu_qpsk = [ser_simu_qpsk; nr_of_errors/20000];
 
     %-----%
     % QAM %
@@ -253,16 +254,76 @@ for SNR = 0:10
     Q = 0.5*erfc(d/(sqrt(2)*2*sigma));
     
     % theoretical symbol error rate
-    ser_theo_qam = [ser_theo_qam, 3.5*Q - 3.0625*Q^2];
+    ser_theo_qam = [ser_theo_qam; 3.5*Q - 3.0625*Q^2];
 
     % simulated symbol error rate
     nr_of_errors = sum(qam~=qam_det);
-    ser_simu_qam = [ser_simu_qam, nr_of_errors/20000];
+    ser_simu_qam = [ser_simu_qam; nr_of_errors/20000];
     
 end
 
+% Plot QPSK SER %
 ser_theo_qpsk
 ser_simu_qpsk
+ser_diff_qpsk = (abs(ser_theo_qpsk - ser_simu_qpsk) ./ ((ser_theo_qpsk + ser_simu_qpsk) / 2)) * 100
 
-ser_simu_qam
+plot_title = 'Theoretical and simulated SER for QPSK with SNR from 0 to 10.';
+f = figure('Name', plot_title);
+set(f, 'Visible', show_plots);
+plot(SNR_range(1:11), ser_theo_qpsk(1:11));
+hold on;
+plot(SNR_range(1:11), ser_simu_qpsk(1:11));
+xlabel('SNR');
+ylabel('SER');
+%title(plot_title);
+hold off;
+if export_plots == true
+    print(strcat(export_dir,'qpsk-ser-noise-0-to-10.png'), '-dpng');
+end
+
+plot_title = 'Theoretical and simulated SER for QPSK with SNR from 15 to 25.';
+f = figure('Name', plot_title);
+set(f, 'Visible', show_plots);
+plot(SNR_range(16:26), ser_theo_qpsk(16:26));
+hold on;
+plot(SNR_range(16:26), ser_simu_qpsk(16:26));
+xlabel('SNR');
+ylabel('SER');
+%title(plot_title);
+hold off;
+if export_plots == true
+    print(strcat(export_dir,'qpsk-ser-noise-15-to-25.png'), '-dpng');
+end
+
+% Plot QAM SER %
 ser_theo_qam
+ser_simu_qam
+ser_diff_qam = (abs(ser_theo_qam - ser_simu_qam) ./ ((ser_theo_qam + ser_simu_qam) / 2)) * 100
+
+plot_title = 'Theoretical and simulated SER for 64-QAM with SNR from 0 to 10.';
+f = figure('Name', plot_title);
+set(f, 'Visible', show_plots);
+plot(SNR_range(1:11), ser_theo_qam(1:11));
+hold on;
+plot(SNR_range(1:11), ser_simu_qam(1:11));
+xlabel('SNR');
+ylabel('SER');
+%title(plot_title);
+hold off;
+if export_plots == true
+    print(strcat(export_dir, '64-qam-ser-noise-0-to-10.png'), '-dpng');
+end
+
+plot_title = 'Theoretical and simulated SER for 64-QAM with SNR from 15 to 25.';
+f = figure('Name', plot_title);
+set(f, 'Visible', show_plots);
+plot(SNR_range(16:26), ser_theo_qam(16:26));
+hold on;
+plot(SNR_range(16:26), ser_simu_qam(16:26));
+xlabel('SNR');
+ylabel('SER');
+%title(plot_title);
+hold off;
+if export_plots == true
+    print(strcat(export_dir,'64-qam-ser-noise-15-to-25.png'), '-dpng');
+end
