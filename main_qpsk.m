@@ -5,15 +5,31 @@ clc
 %----------------------------------------------------%
 % 2.1 The symbol constellation and a symbol sequence %
 %----------------------------------------------------%
+% QPSK is a special case of M-PSK (for M = 4).
+% In M-PSK, the constellation points are located
+% at regular angular intervals on the unit circle.
 const_qpsk = exp(1j*[pi/4 3*pi/4 5*pi/4 7*pi/4]).'; % QPSK alphabet.
 qpsk = const_qpsk(randi(4,20000,1)); % QPSK symbol sequence.
 
-% plot the constellation.
+% Plot the QPSK (4-PSK) constellation.
 figure
 plot(qpsk,'o');
 xlabel('Re');
 ylabel('Im');
 title('QPSK Constellation')
+axis([-2 2 -2 2]); % scale the axis of the figure.
+
+% (Q18) Also generate an 8-PSK symbol stream and plot the constellation.
+% 8-PSK alphabet.
+const_8psk = exp(1j*[0 pi/4 pi/2 3*pi/4 pi 5*pi/4 3*pi/2 7*pi/4]).'; 
+psk8 = const_8psk(randi(8,20000,1)); % 8-PSK symbol sequence.
+
+% Plot the 8-PSK constellation.
+figure
+plot(psk8,'o');
+xlabel('Re');
+ylabel('Im');
+title('8-PSK Constellation')
 axis([-2 2 -2 2]); % scale the axis of the figure.
 
 aqam = [-7 -5 -3 -1 1 3 5 7];
