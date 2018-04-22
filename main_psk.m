@@ -45,8 +45,6 @@ if export_plots == true
 end
 
 % 8-PSK %
-% (Q18) Also generate an 8-PSK symbol stream and plot the constellation.
-% 8-PSK alphabet.
 const_8psk = exp(1j*[0 pi/4 pi/2 3*pi/4 pi 5*pi/4 3*pi/2 7*pi/4]).'; 
 psk8 = const_8psk(randi(8,20000,1)); % 8-PSK symbol sequence.
 
@@ -173,7 +171,7 @@ ser_simu_qpsk = [];
 ser_simu_qam = [];
 ser_theo_qam = [];
 
-for SNR = 1:10
+for SNR = 0:10
     % Adding noise to QPSK and 64-QAM signals.
     % add noise to the QPSK signal.
     pqpsk = std(qpsk)/(std(n)*10^(SNR/20)); % proper constant p.
