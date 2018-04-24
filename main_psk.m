@@ -268,7 +268,7 @@ end
 % Plot QAM SER %
 ser_theo_qam
 ser_simu_qam
-ser_diff_qam = (abs(ser_theo_qam - ser_simu_qam) ./ ((ser_theo_qam + ser_simu_qam) / 2)) * 100
+ser_diff_qam = ((ser_theo_qam - ser_simu_qam) ./ ((ser_theo_qam + ser_simu_qam) / 2)) * 100
 
 plot_title = 'Theoretical and simulated SER for 64-QAM with SNR from 0 to 10.';
 f = figure('Name', plot_title);
