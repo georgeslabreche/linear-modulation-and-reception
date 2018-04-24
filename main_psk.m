@@ -5,8 +5,8 @@ close all
 clc
 
 % Show plots or just export them directly as an image file (or both!).
-show_plots = 'off';
-export_plots = true;
+show_plots = 'on';
+export_plots = false;
 
 % Create plot image export directory if it doesn't exist.
 export_dir = 'plots/psk/';
