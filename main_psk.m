@@ -230,71 +230,97 @@ for SNR = SNR_range
     
 end
 
-% Plot QPSK SER %
-ser_theo_qpsk
-ser_simu_qpsk
-ser_diff_qpsk = (abs(ser_theo_qpsk - ser_simu_qpsk) ./ ((ser_theo_qpsk + ser_simu_qpsk) / 2)) * 100
+% Generate LaTeX QPSK SER Table and Plot values. %
+ser_diff_qpsk = (abs(ser_theo_qpsk - ser_simu_qpsk) ./ ((ser_theo_qpsk + ser_simu_qpsk) / 2)) * 100;
 
+write_ser_latex_table(ser_theo_qpsk, ser_simu_qpsk, 0:10,...
+    'Theoretical and simulated SER for QPSK with different SNR.',...
+    'tab:ser-qpsk',...
+    'ser-qpsk-table.tex');
+
+range = 1:11;
 plot_title = 'Theoretical and simulated SER for QPSK with SNR from 0 to 10.';
 f = figure('Name', plot_title);
 set(f, 'Visible', show_plots);
-plot(SNR_range(1:11), ser_theo_qpsk(1:11));
+yyaxis left;
+plot(SNR_range(range), ser_theo_qpsk(range), '-g', 'LineWidth', 1);
 hold on;
-plot(SNR_range(1:11), ser_simu_qpsk(1:11));
-xlabel('SNR');
+plot(SNR_range(range), ser_simu_qpsk(range), '-.b', 'LineWidth', 1);
 ylabel('SER');
+yyaxis right
+plot(SNR_range(range), ser_diff_qpsk(range), '-r', 'LineWidth', 1);
+ylabel('Difference (%)');
+xlabel('SNR');
 %title(plot_title);
-legend('Theoretical', 'Simulated');
+legend('Theoretical', 'Simulated', 'Difference');
 hold off;
 if export_plots == true
     print(strcat(export_dir,'qpsk-ser-noise-0-to-10.png'), '-dpng');
 end
 
+range = 16:26;
 plot_title = 'Theoretical and simulated SER for QPSK with SNR from 15 to 25.';
 f = figure('Name', plot_title);
 set(f, 'Visible', show_plots);
-plot(SNR_range(16:26), ser_theo_qpsk(16:26));
+yyaxis left;
+plot(SNR_range(range), ser_theo_qpsk(range), '-g', 'LineWidth', 1);
 hold on;
-plot(SNR_range(16:26), ser_simu_qpsk(16:26));
-xlabel('SNR');
+plot(SNR_range(range), ser_simu_qpsk(range), '-.b', 'LineWidth', 1);
 ylabel('SER');
+yyaxis right;
+plot(SNR_range(range), ser_diff_qpsk(range), '-r', 'LineWidth', 1);
+ylabel('Difference (%)');
+xlabel('SNR');
 %title(plot_title);
-legend('Theoretical', 'Simulated');
+legend('Theoretical', 'Simulated', 'Difference');
 hold off;
 if export_plots == true
     print(strcat(export_dir,'qpsk-ser-noise-15-to-25.png'), '-dpng');
 end
 
-% Plot QAM SER %
-ser_theo_qam
-ser_simu_qam
-ser_diff_qam = ((ser_theo_qam - ser_simu_qam) ./ ((ser_theo_qam + ser_simu_qam) / 2)) * 100
+% Generate LaTeX QAM SER Table and Plot values. %
+ser_diff_qam = (abs(ser_theo_qam - ser_simu_qam) ./ ((ser_theo_qam + ser_simu_qam) / 2)) * 100;
 
+write_ser_latex_table(ser_theo_qam, ser_simu_qam, [0:10 15 20 25],...
+    'Theoretical and simulated SER for 64-QAM with different SNR.',...
+    'tab:ser-64-qam',...
+    'ser-64-qam-table.tex');
+
+range = 1:11;
 plot_title = 'Theoretical and simulated SER for 64-QAM with SNR from 0 to 10.';
 f = figure('Name', plot_title);
 set(f, 'Visible', show_plots);
-plot(SNR_range(1:11), ser_theo_qam(1:11));
+yyaxis left;
+plot(SNR_range(range), ser_theo_qam(range), '-g', 'LineWidth', 1);
 hold on;
-plot(SNR_range(1:11), ser_simu_qam(1:11));
-xlabel('SNR');
+plot(SNR_range(range), ser_simu_qam(range), '-.b', 'LineWidth', 1);
 ylabel('SER');
+yyaxis right;
+plot(SNR_range(range), ser_diff_qam(range), '-r', 'LineWidth', 1);
+ylabel('Difference (%)');
+xlabel('SNR');
 %title(plot_title);
-legend('Theoretical', 'Simulated');
+legend('Theoretical', 'Simulated', 'Difference');
 hold off;
 if export_plots == true
     print(strcat(export_dir, '64-qam-ser-noise-0-to-10.png'), '-dpng');
 end
 
+range = 16:26;
 plot_title = 'Theoretical and simulated SER for 64-QAM with SNR from 15 to 25.';
 f = figure('Name', plot_title);
 set(f, 'Visible', show_plots);
-plot(SNR_range(16:26), ser_theo_qam(16:26));
+yyaxis left;
+plot(SNR_range(range), ser_theo_qam(range), '-g', 'LineWidth', 1);
 hold on;
-plot(SNR_range(16:26), ser_simu_qam(16:26));
-xlabel('SNR');
+plot(SNR_range(range), ser_simu_qam(range), '-.b', 'LineWidth', 1);
 ylabel('SER');
+yyaxis right;
+plot(SNR_range(range), ser_diff_qam(range), '-r', 'LineWidth', 1);
+ylabel('Difference (%)');
+xlabel('SNR');
 %title(plot_title);
-legend('Theoretical', 'Simulated');
+legend('Theoretical', 'Simulated', 'Difference');
 hold off;
 if export_plots == true
     print(strcat(export_dir,'64-qam-ser-noise-15-to-25.png'), '-dpng');
