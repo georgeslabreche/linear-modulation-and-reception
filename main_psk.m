@@ -182,45 +182,13 @@ for SNR = SNR_range
     pqam = std(qam)/(std(n)*10^(SNR/20)); % proper constant p.
     snqam = qam + n * pqam; 
 
-    %------%
-    % QPSK %
-    %------%
-    % 4x20000-matrix, each line contains the same sn-vector.
-    sn_block = repmat(snqpsk,1,4).';
-
-    % 4x20000-matrix, where each column contains const.
-    const_block = repmat(const_qpsk,1,20000);
-
-    % 4x20000-matrix, whose every column contains the received symbol
-    % distances to all possible symbol constellation points.
-    distance = abs(sn_block-const_block); 
-
-    % returns the minimum distance y and the corresponding
-    % constellation index ind_1. Both vectors have the size of 1x20000.
-    [~,ind_1] = min(distance); 
-
+    % QPSK symbol detection.
     % using vector ind_1, we can determine the detected symbol vector.
-    qpsk_det = const_qpsk(ind_1);
+    qpsk_det = symbol_detection(snqpsk, const_qpsk);
 
-    %-----%
-    % QAM %
-    %-----%
-    % 64x20000-matrix, each line contains the same sn-vector.
-    sn_block = repmat(snqam,1,64).';
-
-    % 64x20000-matrix, where each column contains the const.
-    const_block = repmat(const_qam,1,20000);
-
-    % 64x20000-matrix, whose every column contains the received symbol 
-    % distances to all possible symbol constellation points.
-    distance = abs(sn_block-const_block);
-
-    % returns the minimum distance y and the corresponding
-    % constellation index ind_2. Both vectors have the size of 1x20000.
-    [y,ind_2] = min(distance); 
-
+    % QAM symbol detection.
     % using vector ind_2, we can determine the detected symbol vector.
-    qam_det = const_qam(ind_2); 
+    qam_det = symbol_detection(snqam, const_qam); 
 
     %---------------------------------%
     % 2.4 The symbol-error rate (SER) %
