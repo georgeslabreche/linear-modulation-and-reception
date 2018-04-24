@@ -108,8 +108,6 @@ sv8psk = std(psk8)^2; % 8-PSK signal variance (power).
 svqam = std(qam)^2; % QAM signal variance (power).
 nv = std(n)^2; % noise variance (power).
 
-SNR = 20; % TargetSNR=20dB
-
 for SNR = [20, 15, 10, 5]
 
     % add noise to the QPSK signal.
@@ -325,3 +323,4 @@ hold off;
 if export_plots == true
     print(strcat(export_dir,'64-qam-ser-noise-15-to-25.png'), '-dpng');
 end
+
