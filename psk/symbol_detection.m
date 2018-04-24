@@ -8,7 +8,7 @@ function psk_det = symbol_detection(snpsk, const_psk)
     sn_block = repmat(snpsk, 1, length(const_psk)).';
 
     % Nx20000-matrix, where each column contains const.
-    const_block = repmat(const_psk, 1, 20000);
+    const_block = repmat(const_psk, 1, length(snpsk));
 
     % Nx20000-matrix, whose every column contains the received symbol
     % distances to all possible symbol constellation points.

@@ -13,7 +13,7 @@ function latex_table_str = write_ser_latex_table(theo, sim, SNR, caption, label,
     label = strcat('\\label{', label ,'}');
     
     % Percentage difference between theoretical and simulated
-    diff = (abs(theo - sim) ./ ((theo + sim) / 2)) * 100;
+    diff = percentage_difference(theo, sim);
     
     % Build data rows for given SNR values.
     data_row = '';

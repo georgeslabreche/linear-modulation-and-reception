@@ -15,6 +15,8 @@ if ~exist(fn, 'dir') && export_plots
    mkdir(export_dir);
 end
 
+symbol_sequence_count = 10000;
+
 %----------------------------------------------------%
 % 2.1 The symbol constellation and a symbol sequence %
 %----------------------------------------------------%
@@ -23,7 +25,7 @@ end
 % In M-PSK, the constellation points are located
 % at regular angular intervals on the unit circle.
 const_qpsk = exp(1j*[pi/4 3*pi/4 5*pi/4 7*pi/4]).'; % QPSK alphabet.
-qpsk = const_qpsk(randi(4,20000,1)); % QPSK symbol sequence.
+qpsk = const_qpsk(randi(4,symbol_sequence_count, 1)); % QPSK symbol sequence.
 
 energy_qpsk = calculate_energy(const_qpsk)
 
@@ -46,7 +48,7 @@ end
 
 % 8-PSK %
 const_8psk = exp(1j*[0 pi/4 pi/2 3*pi/4 pi 5*pi/4 3*pi/2 7*pi/4]).'; 
-psk8 = const_8psk(randi(8,20000,1)); % 8-PSK symbol sequence.
+psk8 = const_8psk(randi(8,symbol_sequence_count,1)); % 8-PSK symbol sequence.
 
 % Calculate the energy.
 energy_8psk = calculate_energy(const_8psk)
@@ -74,7 +76,7 @@ A = repmat(aqam,8,1);
 B = flipud(A') ;
 const_qam = A+1j*B; % 8x8-matrix with constellation points.
 const_qam = const_qam(:); % column-vector with 64-QAM alphabet.
-qam = const_qam(randi(64,20000,1)); % 64-QAM symbol sequence.
+qam = const_qam(randi(64,symbol_sequence_count,1)); % 64-QAM symbol sequence.
 
 % Calculate the energy.
 energy_qam = calculate_energy(const_qam)
@@ -210,7 +212,7 @@ for SNR = SNR_range
     % simulated symbol error rate.
     % comparison returns 0 (false) or 1 (true)
     nr_of_errors = sum(qpsk~=qpsk_det);
-    ser_simu_qpsk = [ser_simu_qpsk; nr_of_errors/20000];
+    ser_simu_qpsk = [ser_simu_qpsk; nr_of_errors/symbol_sequence_count];
 
     %-----%
     % QAM %
@@ -226,18 +228,17 @@ for SNR = SNR_range
 
     % simulated symbol error rate
     nr_of_errors = sum(qam~=qam_det);
-    ser_simu_qam = [ser_simu_qam; nr_of_errors/20000];
+    ser_simu_qam = [ser_simu_qam; nr_of_errors/symbol_sequence_count];
     
 end
 
 % Generate LaTeX QPSK SER Table and Plot values. %
-ser_diff_qpsk = (abs(ser_theo_qpsk - ser_simu_qpsk) ./ ((ser_theo_qpsk + ser_simu_qpsk) / 2)) * 100;
-
 write_ser_latex_table(ser_theo_qpsk, ser_simu_qpsk, 0:10,...
     'Theoretical and simulated SER for QPSK with different SNR.',...
     'tab:ser-qpsk',...
     'ser-qpsk-table.tex');
 
+ser_diff_qpsk = percentage_difference(ser_theo_qpsk, ser_simu_qpsk)
 range = 1:11;
 plot_title = 'Theoretical and simulated SER for QPSK with SNR from 0 to 10.';
 f = figure('Name', plot_title);
@@ -279,13 +280,12 @@ if export_plots == true
 end
 
 % Generate LaTeX QAM SER Table and Plot values. %
-ser_diff_qam = (abs(ser_theo_qam - ser_simu_qam) ./ ((ser_theo_qam + ser_simu_qam) / 2)) * 100;
-
 write_ser_latex_table(ser_theo_qam, ser_simu_qam, [0:10 15 20 25],...
     'Theoretical and simulated SER for 64-QAM with different SNR.',...
     'tab:ser-64-qam',...
     'ser-64-qam-table.tex');
 
+ser_diff_qam = percentage_difference(ser_theo_qam, ser_simu_qam)
 range = 1:11;
 plot_title = 'Theoretical and simulated SER for 64-QAM with SNR from 0 to 10.';
 f = figure('Name', plot_title);
